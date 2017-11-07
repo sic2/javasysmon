@@ -1,6 +1,14 @@
 JavaSysMon
 ==========
 
+This is a new version of JavaSysMon.
+I upgraded it to support 1.8+, since people should not use old version of Java anyway.
+
+
+---
+
+
+
 JavaSysMon is designed to provide an OS-independent way to manage OS processes and get live system performance information such as CPU and memory usage, distributed as a single jar file. It is written in C and Java. However the native binaries are hidden away inside the jar, so you never need to worry about them.
 
 Currently it supports Mac OS X, Linux, Windows, and Solaris. Ultimately we aim to support everything from AIX to Android.

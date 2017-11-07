@@ -37,7 +37,10 @@ public class FileUtils {
      * @throws IOException If there's an IO exception while trying to read the file
      */
     public String slurp(String fileName) throws IOException {
-        return slurpFromInputStream(new FileInputStream(fileName));
+
+        try (InputStream inputStream = new FileInputStream(fileName)) {
+            return slurpFromInputStream(inputStream);
+        }
     }
 
     /**
@@ -50,15 +53,10 @@ public class FileUtils {
     public byte[] slurpToByteArray(String fileName) throws IOException {
         File fileToRead = new File(fileName);
         byte[] contents = new byte[(int) fileToRead.length()];
-        InputStream inputStream = null;
-        try {
-            inputStream = new FileInputStream(fileToRead);
+
+        try (InputStream inputStream = new FileInputStream(fileToRead)){
             inputStream.read(contents);
             return contents;
-        } finally {
-            if (inputStream != null) {
-                inputStream.close();
-            }
         }
     }
 
@@ -73,18 +71,19 @@ public class FileUtils {
         if (stream == null) {
             return null;
         }
-        StringWriter sw = new StringWriter();
-        String line;
-        try {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(stream, "UTF-8"));
+
+        try (InputStreamReader inputStreamReader = new InputStreamReader(stream, "UTF-8");
+             BufferedReader reader = new BufferedReader(inputStreamReader)){
+
+            StringWriter sw = new StringWriter();
+            String line;
             while ((line = reader.readLine()) != null) {
                 sw.write(line);
                 sw.write('\n');
             }
-        } finally {
-            stream.close();
+
+            return sw.toString();
         }
-        return sw.toString();
     }
 
     /**
